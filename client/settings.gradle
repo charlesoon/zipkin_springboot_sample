@@ -1,0 +1,4 @@
+rootProject.name = 'client'
+
+include ':protocol'
+project(':protocol').projectDir = "$rootDir/protocol" as File

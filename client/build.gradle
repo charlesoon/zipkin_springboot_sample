@@ -1,0 +1,49 @@
+buildscript {
+	ext {
+		springBootVersion = '2.0.2.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+
+ext {
+	sleuthVersion = '2.0.1.RELEASE'
+}
+
+dependencies {
+
+	compile "io.zipkin.reporter2:zipkin-sender-urlconnection"
+	compile "io.zipkin.brave:brave-context-slf4j"
+
+	compile "org.springframework.boot:spring-boot-starter-web"
+	compile "org.springframework.boot:spring-boot-starter-actuator"
+	compile "org.springframework.cloud:spring-cloud-starter-sleuth" //	<!-- Sleuth automatically adds trace interceptors when in the classpath -->
+	compile "org.springframework.cloud:spring-cloud-sleuth-zipkin" //	<!-- Sends trace data to zipkin over http (defaults to http://localhost:9411/api/v2/spans) -->
+
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "io.zipkin.brave:brave-bom:5.1.5"
+		mavenBom "org.springframework.cloud:spring-cloud-sleuth:${sleuthVersion}"
+	}
+}
